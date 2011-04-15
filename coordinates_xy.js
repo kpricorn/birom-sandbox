@@ -3,9 +3,6 @@ window.onload = function () {
     var height = 600;
     var R = Raphael("paper", width, height);
 
-    colorhue = .6 || Math.random(),
-    color = "hsb(" + [colorhue, .5, 1] + ")",
-
     var current = null;
     var sideLength = 40;
     var triangleHeight = Math.sqrt(3) * sideLength / 2;
@@ -18,7 +15,7 @@ window.onload = function () {
             console.debug(i + "/" + j);
             realX = i * sideLength + (j % 2 == 0 ? 0 : sideLength / 2) + xOffset;
             realY = j * triangleHeight + yOffset;
-            vertex = R.circle(realX, realY, sideLength / 50).attr({stroke: "#666", fill: color});
+            vertex = R.circle(realX, realY, sideLength / 50).attr({stroke: "#666", fill: '#666'});
             var text = R.text(realX + 3, realY - 3, i + "/" + j);
             text.attr({fill: "#666", 'font-size': sideLength / 7, 'text-anchor': "start"});
             vertex.tX = i;
