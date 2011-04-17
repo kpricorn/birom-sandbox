@@ -1,47 +1,70 @@
+function uvw_to_xy(h, u, v, w) {
+    var xu = Math.cos(Math.PI / 6) * u * h;
+    var yu = Math.cos(Math.PI / 3) * u * h;
+    console.debug(xu + "/" + yu);
+    var xv = 0;
+    var yv = -1 * v * h;
+    console.debug(xv + "/" + yv);
+    var xw = -1 * Math.cos(Math.PI / 6) * w * h;
+    var yw = Math.cos(Math.PI / 3) * w * h;
+    console.debug(xw + "/" + yw);
+    var x = xu + xv + xw;
+    var y = yu + yv + yw;
+    return [-1 * x, -1 * y];
+}
+
 window.onload = function () {
     var width = 800;
     var height = 600;
     var R = Raphael("paper", width, height);
 
-    var current = null;
-    var sideLength = 40;
+    var sideLength = 100;
     var triangleHeight = Math.sqrt(3) * sideLength / 2;
-    var vertices = R.set();
-    var faces = R.set();
     var xOffset = width / 2;
     var yOffset = height / 2;
-
-    // --> v
-    for (var i = -10; i < 10; i++) {
-        var path;
-        var uvwYOffset = i % 2 == 0 ? .8 : .2;
-        var xyYOffset = i % 2 == 0 ? 1/3 : 2/3;
-        var apex;
-        if (i % 2 == 0) {
-            path = [
-                "M", xOffset, yOffset + i * triangleHeight,
-                "L", xOffset + sideLength / 2, yOffset + i * triangleHeight + triangleHeight,
-                "L", xOffset - sideLength / 2, yOffset + i * triangleHeight + triangleHeight,
-                "Z"];
-            apex = Math.round(xOffset) + "/" + Math.round(yOffset + i * triangleHeight);
-        } else {
-            path = [
-                "M", xOffset, yOffset + i * triangleHeight + triangleHeight,
-                "L", xOffset + sideLength / 2, yOffset + i * triangleHeight,
-                "L", xOffset - sideLength / 2, yOffset + i * triangleHeight,
-                "Z"];
-            apex = Math.round(xOffset) + "/" + Math.round(yOffset + i * triangleHeight + triangleHeight);
-        }
-        var triangle = R.path(path);
-        var uvw = R.text(
-                xOffset,
-                yOffset + triangleHeight * uvwYOffset + i * triangleHeight,
-                "0/" + i + "/0");
-        var xy = R.text(
-                xOffset,
-                yOffset + i * triangleHeight + triangleHeight * xyYOffset,
-                apex);
-        uvw.attr({fill: "white", 'font-size': sideLength / 4, 'text-anchor': "middle"});
-        xy.attr({fill: "white", 'font-size': sideLength / 8, 'text-anchor': "middle"});
+    var upright = false;
+    for (var u = -3; u < 3; u++) {
+        for (var v = -3; v < 3; v++) {
+            for (var w = -3; w < 3; w++) {
+                if (u > 0 && v > 0 && w > 0) {
+                    continue;
+                }
+                console.debug("########################################");
+                console.debug(u + "/" + v + "/" + w);
+                var path;
+                var coord = uvw_to_xy(triangleHeight, u, v, w);
+                var x = coord[0] + xOffset;
+                var y = coord[1] + yOffset;
+                console.debug(x + "/" + y);
+                var c = R.circle(x, y, 3);
+                c.attr({fill: 'red', stroke: 'none'});
+                upright = u + v + w % 2 == 0;
+                var apex;
+                if (upright) {
+                    path = [
+                        "M", x, y + v * triangleHeight,
+                        "L", x + sideLength / 2, y + v * triangleHeight + triangleHeight,
+                        "L", x - sideLength / 2, y + v * triangleHeight + triangleHeight,
+                        "Z"];
+                    apex = Math.round(x) + "/" + Math.round(y + v * triangleHeight);
+                } else {
+                    path = [
+                        "M", x, y + v * triangleHeight + triangleHeight,
+                        "L", x + sideLength / 2, y + v * triangleHeight,
+                        "L", x - sideLength / 2, y + v * triangleHeight,
+                        "Z"];
+                    apex = Math.round(x) + "/" + Math.round(y + v * triangleHeight + triangleHeight);
+                }
+                //var triangle = R.path(path);
+                var uvw = R.text(
+                        x + 4, y, u + "/" + v + "/" + w);
+                //var xy = R.text(
+                //        x,
+                //        y + v * triangleHeight + triangleHeight * xyYOffset,
+                //        apex);
+                uvw.attr({fill: "white", 'font-size': 8, 'text-anchor': "start"});
+                //xy.attr({fill: "white", 'font-size': sideLength / 8, 'text-anchor': "middle"});
+            };
+        };
     };
 };
