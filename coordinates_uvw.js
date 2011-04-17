@@ -18,17 +18,31 @@ window.onload = function () {
     var height = 600;
     var R = Raphael("paper", width, height);
 
-    var sideLength = 100;
+    var sideLength = 10;
     var triangleHeight = Math.sqrt(3) * sideLength / 2;
     var xOffset = width / 2;
     var yOffset = height / 2;
     var upright = false;
-    for (var u = -3; u < 3; u++) {
-        for (var v = -3; v < 3; v++) {
-            for (var w = -3; w < 3; w++) {
-                if (u > 0 && v > 0 && w > 0) {
+    var totalCoordinates = 0;
+    var validCoordinates = 0;
+    for (var u = -9; u <= 9; u++) {
+        for (var v = -9; v <= 9; v++) {
+            for (var w = -9; w <= 9; w++) {
+                totalCoordinates++;
+                // check sectors, not all combos are valid
+                if (
+                        u > 0 && v > 0 && w > 0
+                        || u < 0 && v < 0 && w < 0
+                        || u < 0 && v < 0 
+                        || u < 0 && w < 0
+                        || v < 0 && w < 0
+                        || u > 0 && v > 0 
+                        || u > 0 && w > 0
+                        || v > 0 && w > 0
+                    ) {
                     continue;
                 }
+                validCoordinates++;
                 console.debug("########################################");
                 console.debug(u + "/" + v + "/" + w);
                 var path;
@@ -36,7 +50,7 @@ window.onload = function () {
                 var x = coord[0] + xOffset;
                 var y = coord[1] + yOffset;
                 console.debug(x + "/" + y);
-                var c = R.circle(x, y, 3);
+                var c = R.circle(x, y, 1);
                 c.attr({fill: 'red', stroke: 'none'});
                 upright = u + v + w % 2 == 0;
                 var apex;
@@ -62,9 +76,10 @@ window.onload = function () {
                 //        x,
                 //        y + v * triangleHeight + triangleHeight * xyYOffset,
                 //        apex);
-                uvw.attr({fill: "white", 'font-size': 8, 'text-anchor': "start"});
+                uvw.attr({fill: "white", 'font-size': 3, 'text-anchor': "start"});
                 //xy.attr({fill: "white", 'font-size': sideLength / 8, 'text-anchor': "middle"});
             };
         };
     };
+    console.debug("Valid: " + validCoordinates + " of " + totalCoordinates);
 };
