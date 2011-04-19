@@ -1,14 +1,13 @@
-function uvw_to_xy(h, u, v, w) {
-    var xu = Math.cos(Math.PI / 6) * u * h - h;
-    var yu = Math.cos(Math.PI / 3) * u * h - h;
-    var xv = 0;
-    var yv = -1 * v * h;
-    var xw = -1 * Math.cos(Math.PI / 6) * w * h - h;
-    var yw = Math.cos(Math.PI / 3) * w * h - h;
+function uvw_to_xy(s, u, v, w) {
+    var upright = (u + v + w) % 2 == 0;
+    var h = Math.sqrt(3) * s / 2;
+
+    var xu = 0;
+    var y = u * h + (upright ? h / 3 : 2 * h / 3);
+    var xv = Math.sin(5 * Math.PI / 6) * v * s;
+    var xw = Math.sin(Math.PI / 6) * w * s;
     var x = xu + xv + xw;
-    var y = yu + yv + yw;
-    upright = (u + v + w) % 2 == 0;
-    return [-1 * x, -1 * y];
+    return [x, -1 * y];
 }
 
 window.onload = function () {
@@ -16,7 +15,7 @@ window.onload = function () {
     var height = 600;
     var R = Raphael("paper", width, height);
 
-    var sideLength = 20;
+    var sideLength = 40;
     var triangleHeight = Math.sqrt(3) * sideLength / 2;
     var xOffset = width / 2;
     var yOffset = height / 2;
@@ -25,9 +24,9 @@ window.onload = function () {
     var vertices = R.set();
     var coordinates = R.set();
     var faces = R.set();
-    for (var u = -2; u <= 2; u++) {
-        for (var v = -2; v <= 2; v++) {
-            for (var w = -2; w <= 2; w++) {
+    for (var u = -9; u <= 9; u++) {
+        for (var v = -9; v <= 9; v++) {
+            for (var w = -9; w <= 9; w++) {
                 totalCoordinates++;
                 // check sectors, not all combos are valid
                 var valid = u == w - v || u + 1 == w - v;
@@ -37,7 +36,7 @@ window.onload = function () {
                 console.log("✓: " + u + "/" + v + "/" + w);
                 validCoordinates++;
                 var path;
-                var coord = uvw_to_xy(triangleHeight, u, v, w);
+                var coord = uvw_to_xy(sideLength, u, v, w);
                 var x = coord[0] + xOffset;
                 var y = coord[1] + yOffset;
                 var c = R.circle(x, y, 1);
@@ -45,38 +44,36 @@ window.onload = function () {
                 vertices.push(c);
                 upright = (u + v + w) % 2 == 0;
                 var apex;
-                var color = "black";
                 if (upright) {
                     path = [
-                        "M", x, y - triangleHeight,
-                        "L", x + sideLength / 2, y,
-                        "L", x - sideLength / 2, y,
+                        "M", x, y - 2 * triangleHeight / 3,
+                        "L", x + sideLength / 2, y + triangleHeight / 3,
+                        "L", x - sideLength / 2, y + triangleHeight / 3,
                         "Z"];
                     apex = Math.round(x) + "/" + Math.round(y + v * triangleHeight);
                 } else {
                     path = [
-                        "M", x, y,
-                        "L", x + sideLength / 2, y - triangleHeight,
-                        "L", x - sideLength / 2, y - triangleHeight,
+                        "M", x, y + 2 * triangleHeight / 3,
+                        "L", x + sideLength / 2, y - triangleHeight / 3,
+                        "L", x - sideLength / 2, y - triangleHeight / 3,
                         "Z"];
                     apex = Math.round(x) + "/" + Math.round(y + v * triangleHeight + triangleHeight);
-                    color = "white";
                 }
-                //var triangle = R.path(path);
-                //faces.push(triangle);
-                //triangle.attr({fill: color});
+                var triangle = R.path(path);
+                faces.push(triangle);
                 var uvw = R.text(
-                        x + 4, y, u + "/" + v + "/" + w);
+                        x, y + (upright?5:-5), u + "/" + v + "/" + w);
                 coordinates.push(uvw);
                 //var xy = R.text(
                 //        x,
                 //        y + v * triangleHeight + triangleHeight * xyYOffset,
                 //        apex);
-                uvw.attr({fill: "black", 'font-size': 7, 'text-anchor': "start"});
+                uvw.attr({fill: "white", 'font-size': 5, 'text-anchor': "middle"});
                 //xy.attr({fill: "white", 'font-size': sideLength / 8, 'text-anchor': "middle"});
             };
         };
     };
     console.log("✓ total: " + validCoordinates);
+    faces.attr({'stroke-width': .3});
     faces.toBack();
 };
