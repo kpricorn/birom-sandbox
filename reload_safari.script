@@ -1,0 +1,5 @@
+tell application "Safari"
+  set sameURL to URL of tab 1 of front window
+  set URL of tab 1 of front window to sameURL
+end tell
+
