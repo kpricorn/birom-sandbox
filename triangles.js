@@ -27,11 +27,11 @@ function xy_to_uvw(s, u, v, w) {
 
 $(document).ready(function () {
     var startTime = new Date();
-    var width = 400;
-    var height = 400;
+    var width = 1000;
+    var height = 2000;
     var paper = Raphael("paper", width, height);
 
-    var sideLength = 40;
+    var sideLength = 50;
     // radius of the circumscribed circle
     var r = Math.sqrt(3) * sideLength / 6;
     var R = Math.sqrt(3) * sideLength / 3;
@@ -78,9 +78,9 @@ $(document).ready(function () {
                 var triangle = paper.path(path);
                 faces.push(triangle);
                 var uvw = paper.text(
-                        x, y + (upright?5:-5), u + "/" + v + "/" + w);
+                        x, y + (upright?sideLength/6:-sideLength/6), u + "/" + v + "/" + w);
                 coordinates.push(uvw);
-                uvw.attr({fill: "white", 'font-size': 5, 'text-anchor': "middle"});
+                uvw.attr({fill: "white", 'font-size': sideLength / 6, 'text-anchor': "middle"});
             });
         };
     };
