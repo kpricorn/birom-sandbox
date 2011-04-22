@@ -16,6 +16,7 @@
 
 #header-container {
     height: 30px;
+    font-size: 11px;
 }
 
 #header {
@@ -29,7 +30,6 @@
     width: 940px;
     height: 300px;
     margin: 0 auto;
-    font-size: 1.4em;
     overflow: auto;
     padding: 90px 0 40px;
 }
@@ -38,3 +38,8 @@
     float: left;
     width: 625px;
 }
+
+#uvw #xy {
+    min-width: 100px;
+}
+
