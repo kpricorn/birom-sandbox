@@ -23,20 +23,20 @@ function xy_to_uvw(s, x, y) {
 
     var u = -1 * Math.floor((y + R) / h);
     var v = Math.floor((Math.cos(Math.PI / 3 - Math.atan(x/y)) * 
-                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + R) / h);
+                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + r) / h);
 
     var w = Math.floor((Math.cos(Math.PI / 6 + Math.atan(y/x)) * 
-                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + R) / h);
+                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + r) / h);
     return [u, v, w];
 }
 
 $(document).ready(function () {
-    var sideLength = 40;
+    var sideLength = 20;
     var width = $('#paper').width();
     var height = $('#paper').height();
     var xOffset = width / 2;
     var yOffset = height / 2;
-    var fieldSize = 3;
+    var fieldSize = 10;
     $(document).mousemove(function(e){
         var x = e.pageX - width / 2;
         var y = e.pageY - height / 2;
