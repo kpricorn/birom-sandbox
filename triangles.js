@@ -1,9 +1,3 @@
-var sideLength = 40;
-var width = 600;
-var height = 600;
-var xOffset = width / 2;
-var yOffset = height / 2;
-var fieldSize = 5;
 
 function uvw_to_xy(s, u, v, w) {
     var r = Math.sqrt(3) * s / 6;
@@ -36,19 +30,23 @@ function xy_to_uvw(s, x, y) {
     return [u, v, w];
 }
 
-jQuery(document).ready(function(){
-   $(document).mousemove(function(e){
-       var x = e.pageX - width / 2;
-       var y = e.pageY - height / 2;
-       var c = xy_to_uvw(sideLength, x, y);
-      $('#xy').html(x +', '+ y);
-      $('#uvw').html(c[0] + ', ' + c[1] + ', ' + c[2]);
-   }); 
-})
-
 $(document).ready(function () {
+    var sideLength = 40;
+    var width = $('#paper').width();
+    var height = $('#paper').height();
+    var xOffset = width / 2;
+    var yOffset = height / 2;
+    var fieldSize = 3;
+    $(document).mousemove(function(e){
+        var x = e.pageX - width / 2;
+        var y = e.pageY - height / 2;
+        var c = xy_to_uvw(sideLength, x, y);
+       $('#xy').html(x +', '+ y);
+       $('#uvw').html(c[0] + ', ' + c[1] + ', ' + c[2]);
+    }); 
+
     var startTime = new Date();
-    var paper = Raphael("paper", width, height);
+    var paper = Raphael("paper", "100%", "100%");
 
     // radius of the circumscribed circle
     var r = Math.sqrt(3) * sideLength / 6;
