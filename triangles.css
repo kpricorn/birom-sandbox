@@ -1,0 +1,40 @@
+#paper {
+    height: 300px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 300px;
+}
+
+#header-wrap {
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+#header-container {
+    height: 30px;
+}
+
+#header {
+    width: 940px;
+    margin: 0 auto;
+    position: relative;
+    background-color: black;
+}
+
+#container {
+    width: 940px;
+    height: 300px;
+    margin: 0 auto;
+    font-size: 1.4em;
+    overflow: auto;
+    padding: 90px 0 40px;
+}
+
+#content {
+    float: left;
+    width: 625px;
+}

@@ -1,3 +1,10 @@
+var sideLength = 40;
+var width = 600;
+var height = 600;
+var xOffset = width / 2;
+var yOffset = height / 2;
+var fieldSize = 5;
+
 function uvw_to_xy(s, u, v, w) {
     var r = Math.sqrt(3) * s / 6;
     var R = Math.sqrt(3) * s / 3;
@@ -13,38 +20,46 @@ function uvw_to_xy(s, u, v, w) {
     return [x, -1 * y];
 }
 
-function xy_to_uvw(s, u, v, w) {
-    var upright = (u + v + w) % 2 == 0;
+function xy_to_uvw(s, x, y) {
+    var cos30 = Math.cos(Math.PI / 6);
+    var sin30 = Math.sin(Math.PI / 6);
+    var r = Math.sqrt(3) * s / 6;
+    var R = Math.sqrt(3) * s / 3;
     var h = Math.sqrt(3) * s / 2;
+    console.debug("r: " + r + ", R: " + R + ", h: " + h);
 
-    var xu = 0;
-    var y = u * h + (upright ? h / 3 : 2 * h / 3);
-    var xv = Math.sin(5 * Math.PI / 6) * v * s;
-    var xw = Math.sin(Math.PI / 6) * w * s;
-    var x = xu + xv + xw;
-    return [x, -1 * y];
+    var u = -1 * Math.floor((y + R) / h);
+    var v = Math.floor((Math.cos(Math.PI / 6 - Math.atan(x/y)) * 
+                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + r) / h);
+//    var w = x * (1 - sin30) / (R * sin30 * cos30);
+    var w = 0;
+    return [u, v, w];
 }
+
+jQuery(document).ready(function(){
+   $(document).mousemove(function(e){
+       var x = e.pageX - width / 2;
+       var y = e.pageY - height / 2;
+       var c = xy_to_uvw(sideLength, x, y);
+      $('#tracker').html(x +', '+ y + ' [' + c[0] + ', ' + c[1] + ', ' + c[2] + ']');
+   }); 
+})
 
 $(document).ready(function () {
     var startTime = new Date();
-    var width = 1000;
-    var height = 2000;
     var paper = Raphael("paper", width, height);
 
-    var sideLength = 50;
     // radius of the circumscribed circle
     var r = Math.sqrt(3) * sideLength / 6;
     var R = Math.sqrt(3) * sideLength / 3;
     var h = Math.sqrt(3) * sideLength / 2;
-    var xOffset = width / 2;
-    var yOffset = height / 2;
     var totalCoordinates = 0;
     var validCoordinates = 0;
     var vertices = paper.set();
     var coordinates = paper.set();
     var faces = paper.set();
-    for (var v = -9; v <= 9; v++) {
-        for (var w = -9; w <= 9; w++) {
+    for (var v = -1 * fieldSize; v <= fieldSize; v++) {
+        for (var w = -1 * fieldSize; w <= fieldSize; w++) {
             $.each([w - v, w - v - 1], function() {
                 var u = this;
                 totalCoordinates++;
