@@ -26,13 +26,13 @@ function xy_to_uvw(s, x, y) {
     var r = Math.sqrt(3) * s / 6;
     var R = Math.sqrt(3) * s / 3;
     var h = Math.sqrt(3) * s / 2;
-    console.debug("r: " + r + ", R: " + R + ", h: " + h);
 
     var u = -1 * Math.floor((y + R) / h);
-    var v = Math.floor((Math.cos(Math.PI / 6 - Math.atan(x/y)) * 
-                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + r) / h);
-//    var w = x * (1 - sin30) / (R * sin30 * cos30);
-    var w = 0;
+    var v = Math.floor((Math.cos(Math.PI / 3 - Math.atan(x/y)) * 
+                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + R) / h);
+
+    var w = Math.floor((Math.cos(Math.PI / 6 + Math.atan(y/x)) * 
+                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + R) / h);
     return [u, v, w];
 }
 
@@ -41,7 +41,8 @@ jQuery(document).ready(function(){
        var x = e.pageX - width / 2;
        var y = e.pageY - height / 2;
        var c = xy_to_uvw(sideLength, x, y);
-      $('#tracker').html(x +', '+ y + ' [' + c[0] + ', ' + c[1] + ', ' + c[2] + ']');
+      $('#xy').html(x +', '+ y);
+      $('#uvw').html(c[0] + ', ' + c[1] + ', ' + c[2]);
    }); 
 })
 
@@ -99,9 +100,7 @@ $(document).ready(function () {
             });
         };
     };
-    console.log("✓ total: " + validCoordinates);
     faces.attr({'stroke-width': .3});
     faces.toBack();
     //faces.hide();
-    console.log("grid loaded");
 });
