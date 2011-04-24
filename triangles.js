@@ -1,4 +1,3 @@
-
 function uvw_to_xy(s, u, v, w) {
     var r = Math.sqrt(3) * s / 6;
     var R = Math.sqrt(3) * s / 3;
@@ -15,18 +14,18 @@ function uvw_to_xy(s, u, v, w) {
 }
 
 function xy_to_uvw(s, x, y) {
-    var cos30 = Math.cos(Math.PI / 6);
-    var sin30 = Math.sin(Math.PI / 6);
     var r = Math.sqrt(3) * s / 6;
     var R = Math.sqrt(3) * s / 3;
     var h = Math.sqrt(3) * s / 2;
 
     var u = -1 * Math.floor((y + R) / h);
-    var v = Math.floor((Math.cos(Math.PI / 3 - Math.atan(x/y)) * 
-                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + r) / h);
 
-    var w = Math.floor((Math.cos(Math.PI / 6 + Math.atan(y/x)) * 
-                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + r) / h);
+    var v = (y > 0 ? 1 : -1) * Math.floor((Math.cos(Math.PI / 3 - Math.atan(x/y)) * 
+                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + (y > 0 ? r : R)) / h);
+
+    var w = (y > 0 ? 1 : -1) * Math.floor((Math.cos(2 * Math.PI / 3 - Math.atan(x/y)) *
+                Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + (y > 0 ? R : r)) / h);
+
     return [u, v, w];
 }
 
@@ -37,12 +36,26 @@ $(document).ready(function () {
     var xOffset = width / 2;
     var yOffset = height / 2;
     var fieldSize = 10;
+    var uS = [], vS = [], wS = [];
     $(document).mousemove(function(e){
-        var x = e.pageX - width / 2;
-        var y = e.pageY - height / 2;
+        var x = e.pageX - xOffset;
+        var y = e.pageY - yOffset;
+        faces.attr({fill: 'none'});
         var c = xy_to_uvw(sideLength, x, y);
-       $('#xy').html(x +', '+ y);
-       $('#uvw').html(c[0] + ', ' + c[1] + ', ' + c[2]);
+        var uSet = uS[c[0]];
+        if (uSet != undefined) {
+            uSet.attr({fill: 'red'});
+        }
+        var vSet = vS[c[1]];
+        if (vSet != undefined) {
+            vSet.attr({fill: 'blue'});
+        }
+        var wSet = wS[c[2]];
+        if (wSet != undefined) {
+            wSet.attr({fill: 'green'});
+        }
+        $('#xy').html(x +', '+ y);
+        $('#uvw').html(c[0] + ', ' + c[1] + ', ' + c[2]);
     }); 
 
     var startTime = new Date();
@@ -89,7 +102,18 @@ $(document).ready(function () {
                         "Z"];
                     apex = Math.round(x) + "/" + Math.round(y + v * r + r);
                 }
+                uS[u] = uS[u] || paper.set();
+                vS[v] = vS[v] || paper.set();
+                wS[w] = wS[w] || paper.set();
+                var uSet = uS[u];
+                var vSet = vS[v];
+                var wSet = wS[w];
+
                 var triangle = paper.path(path);
+                uSet.push(triangle);
+                vSet.push(triangle);
+                wSet.push(triangle);
+
                 faces.push(triangle);
                 var uvw = paper.text(
                         x, y + (upright?sideLength/6:-sideLength/6), u + "/" + v + "/" + w);
