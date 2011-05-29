@@ -16,6 +16,9 @@
   };
   global.xy_to_uvw = function(s, x, y) {
     var R, factor, h, offset, r, u, v, w;
+    if (x === 0 && y === 0) {
+      return [0, 0, 0];
+    }
     r = (Math.sqrt(3)) * s / 6;
     R = (Math.sqrt(3)) * s / 3;
     h = (Math.sqrt(3)) * s / 2;

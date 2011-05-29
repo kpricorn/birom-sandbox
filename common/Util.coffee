@@ -13,6 +13,7 @@ global.uvw_to_xy = (s, u, v, w) ->
   [x, -y]
 
 global.xy_to_uvw = (s, x, y) ->
+  return [0, 0, 0] if x is 0 and y is 0
   r = (Math.sqrt 3) * s / 6
   R = (Math.sqrt 3) * s / 3
   h = (Math.sqrt 3) * s / 2
