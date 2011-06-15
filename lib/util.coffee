@@ -55,12 +55,19 @@ global.xy_to_uvw = (s, x, y) ->
 
   u = (Math.floor (R + y) / h)
   if y > 0
-    factor = 1
+    factor = -1
     offset = r
   else
-    factor = -1
+    factor = 1
     offset = R
   v = factor * (Math.floor (Math.cos(PI60 - (Math.atan x/y)) * Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + offset) / h)
+
+  if y > 0
+    factor = 1
+    offset = R
+  else
+    factor = -1
+    offset = r
   w = factor * (Math.floor (Math.cos(2 * PI60 - (Math.atan x/y)) * Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + offset) / h)
   [u, v, w]
 

@@ -26,7 +26,7 @@ describe 'Utility code', ->
       (expect(uvw_to_xy s, 1, 0, 0)).toEqual([0, R])
       (expect(uvw_to_xy s, 1, -1, 0)).toEqual([5.196152422706632, h])
       (expect(uvw_to_xy s, 1, -1, 1)).toEqual([s, R])
-    it 'return the correct u/v/w coordinates', ->
+    describe 'return the correct u/v/w coordinates', ->
       #       x
       #   +--->      A
       #   |          o  0,-R
@@ -39,38 +39,55 @@ describe 'Utility code', ->
 
       # center x
       (expect(xy_to_uvw 0, 0, 0)).toEqual([0, 0, 0])
-      # A
-      [u, v, w] = (xy_to_uvw s, 0, - R + f)
-      expect(u).toEqual 0
-      [u, v, w] = xy_to_uvw s, 0, - R
-      expect(u).toEqual 0
-      [u, v, w] = xy_to_uvw s, 0, - R - f
-      expect(u).toEqual -1
-      [u, v, w] = xy_to_uvw s, 0, - R - h
-      expect(u).toEqual -1
-      [u, v, w] = xy_to_uvw s, 0, - R - h - f
-      expect(u).toEqual -2
-      [u, v, w] = xy_to_uvw s, 0, r - f
-      expect(u).toEqual 0
-      [u, v, w] = xy_to_uvw s, 0, r
-      expect(u).toEqual 1
-      [u, v, w] = xy_to_uvw s, 0, r + f
-      expect(u).toEqual 1
-      [u, v, w] = xy_to_uvw s, 0, r + h - f
-      expect(u).toEqual 1
-      [u, v, w] = xy_to_uvw s, 0, r + h
-      expect(u).toEqual 2
+      # u
+      it 'tests return value of u', ->
+        [u, v, w] = (xy_to_uvw s, 0, - R + f)
+        expect([u, v, w]).toEqual [0, 0, 0]
+        [u, v, w] = xy_to_uvw s, 0, - R
+        expect(u).toEqual 0
+        [u, v, w] = xy_to_uvw s, 0, - R - f
+        expect(u).toEqual -1
+        [u, v, w] = xy_to_uvw s, 0, - R - h
+        expect(u).toEqual -1
+        [u, v, w] = xy_to_uvw s, 0, - R - h - f
+        expect(u).toEqual -2
+        [u, v, w] = xy_to_uvw s, 0, r - f
+        expect(u).toEqual 0
+        [u, v, w] = xy_to_uvw s, 0, r
+        expect(u).toEqual 1
+        [u, v, w] = xy_to_uvw s, 0, r + f
+        expect(u).toEqual 1
+        [u, v, w] = xy_to_uvw s, 0, r + h - f
+        expect(u).toEqual 1
+        [u, v, w] = xy_to_uvw s, 0, r + h
+        expect(u).toEqual 2
 
-      ## H
-      #(expect(xy_to_uvw s, 0, r - f)).toEqual([0, 0, 0])
-      ## K
-      #(expect(xy_to_uvw s, -r * Math.cos(Math.PI/6) + f, - Math.cos(Math.PI/3) + f)).toEqual([0, 0, 0])
-      ## K
-      #(expect(xy_to_uvw s, - Math.cos(Math.PI/6) * r + f, - Math.cos(Math.PI/3) * r + f)).toEqual([0, 0, 0])
-      ## L
-      #(expect(xy_to_uvw s, Math.cos(Math.PI/6) * r - f, - Math.cos(Math.PI/3) * r + f)).toEqual([0, 0, 0])
-      ## H
-      #(expect(xy_to_uvw s, 0, r - f)).toEqual([0, 0, 0])
-      ## I
-      ## (expect(xy_to_uvw s, -R / Math.tan(Math.PI/6) + f, 0)).toEqual([0, 0, 0])
+      # v
+      it 'tests return value of v', ->
+        console.log("v ###################################")
+        [u, v, w] = (xy_to_uvw s, 0, - R + f)
+        expect([u, v, w]).toEqual [0, 0, 0]
+        [u, v, w] = xy_to_uvw s, -s/2, -r
+        expect(v).toEqual 1
+        [u, v, w] = xy_to_uvw s, s, R
+        expect(v).toEqual -1
+        [u, v, w] = xy_to_uvw s, -1.5 * s, -h
+        expect(v).toEqual 2
+        [u, v, w] = xy_to_uvw s, 1.5 * s, h
+        expect(v).toEqual -2
+
+      # w
+      it 'tests return value of w', ->
+        console.log("W ###################################")
+        [u, v, w] = (xy_to_uvw s, 0, - R + f)
+        expect([u, v, w]).toEqual [0, 0, 0]
+        [u, v, w] = xy_to_uvw s, s/2, -r
+        expect(w).toEqual 1
+        [u, v, w] = xy_to_uvw s, -s, R
+        expect(w).toEqual -1
+
+        [u, v, w] = xy_to_uvw s, 1.5 * s, -h
+        expect(w).toEqual 2
+        [u, v, w] = xy_to_uvw s, -1.5 * s, h
+        expect(w).toEqual -2
 
