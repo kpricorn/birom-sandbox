@@ -37,21 +37,40 @@ describe 'Utility code', ->
       #  -s/2,r o----o----o s/2,r
       #         B    H    C
 
-      #  # center x
-      #  (expect(xy_to_uvw 0, 0, 0)).toEqual([0, 0, 0])
-      #  # A
-      #  (expect(xy_to_uvw s, 0, -R + f)).toEqual([0, 0, 0])
-      #  (expect(xy_to_uvw s, 0, -R)).toEqual([1, 0, 0])
-      #  # H
-      #  (expect(xy_to_uvw s, 0, r - f)).toEqual([0, 0, 0])
-      #  # K
-      #  (expect(xy_to_uvw s, -r * Math.cos(Math.PI/6) + f, - Math.cos(Math.PI/3) + f)).toEqual([0, 0, 0])
-      #  # K
-      #  (expect(xy_to_uvw s, - Math.cos(Math.PI/6) * r + f, - Math.cos(Math.PI/3) * r + f)).toEqual([0, 0, 0])
-      #  # L
-      #  (expect(xy_to_uvw s, Math.cos(Math.PI/6) * r - f, - Math.cos(Math.PI/3) * r + f)).toEqual([0, 0, 0])
-      #  # H
-      #  (expect(xy_to_uvw s, 0, r - f)).toEqual([0, 0, 0])
-      #  # I
-      #  # (expect(xy_to_uvw s, -R / Math.tan(Math.PI/6) + f, 0)).toEqual([0, 0, 0])
+      # center x
+      (expect(xy_to_uvw 0, 0, 0)).toEqual([0, 0, 0])
+      # A
+      [u, v, w] = (xy_to_uvw s, 0, - R + f)
+      expect(u).toEqual 0
+      [u, v, w] = xy_to_uvw s, 0, - R
+      expect(u).toEqual 0
+      [u, v, w] = xy_to_uvw s, 0, - R - f
+      expect(u).toEqual -1
+      [u, v, w] = xy_to_uvw s, 0, - R - h
+      expect(u).toEqual -1
+      [u, v, w] = xy_to_uvw s, 0, - R - h - f
+      expect(u).toEqual -2
+      [u, v, w] = xy_to_uvw s, 0, r - f
+      expect(u).toEqual 0
+      [u, v, w] = xy_to_uvw s, 0, r
+      expect(u).toEqual 1
+      [u, v, w] = xy_to_uvw s, 0, r + f
+      expect(u).toEqual 1
+      [u, v, w] = xy_to_uvw s, 0, r + h - f
+      expect(u).toEqual 1
+      [u, v, w] = xy_to_uvw s, 0, r + h
+      expect(u).toEqual 2
+
+      ## H
+      #(expect(xy_to_uvw s, 0, r - f)).toEqual([0, 0, 0])
+      ## K
+      #(expect(xy_to_uvw s, -r * Math.cos(Math.PI/6) + f, - Math.cos(Math.PI/3) + f)).toEqual([0, 0, 0])
+      ## K
+      #(expect(xy_to_uvw s, - Math.cos(Math.PI/6) * r + f, - Math.cos(Math.PI/3) * r + f)).toEqual([0, 0, 0])
+      ## L
+      #(expect(xy_to_uvw s, Math.cos(Math.PI/6) * r - f, - Math.cos(Math.PI/3) * r + f)).toEqual([0, 0, 0])
+      ## H
+      #(expect(xy_to_uvw s, 0, r - f)).toEqual([0, 0, 0])
+      ## I
+      ## (expect(xy_to_uvw s, -R / Math.tan(Math.PI/6) + f, 0)).toEqual([0, 0, 0])
 

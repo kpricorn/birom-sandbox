@@ -52,10 +52,8 @@ global.xy_to_uvw = (s, x, y) ->
   r = SR3 * s / 6
   R = SR3 * s / 3
   h = SR3 * s / 2
-  console.log "s: #{s} / x: #{x} / y: #{y}"
-  console.log "r: #{r} / R: #{R} / h: #{h}"
 
-  u = -(Math.floor (y + R) / h)
+  u = (Math.floor (R + y) / h)
   if y > 0
     factor = 1
     offset = r
