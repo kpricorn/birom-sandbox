@@ -64,21 +64,25 @@ describe 'Utility code', ->
 
       # v
       it 'tests return value of v', ->
-        console.log("v ###################################")
         [u, v, w] = (xy_to_uvw s, 0, - R + f)
         expect([u, v, w]).toEqual [0, 0, 0]
         [u, v, w] = xy_to_uvw s, -s/2, -r
         expect(v).toEqual 1
         [u, v, w] = xy_to_uvw s, s, R
         expect(v).toEqual -1
+
         [u, v, w] = xy_to_uvw s, -1.5 * s, -h
         expect(v).toEqual 2
         [u, v, w] = xy_to_uvw s, 1.5 * s, h
         expect(v).toEqual -2
 
+        [u, v, w] = xy_to_uvw s, -3 * s, -2 * h
+        expect(v).toEqual 4
+        [u, v, w] = xy_to_uvw s, 3 * s, 2 * h
+        expect(v).toEqual -4
+
       # w
       it 'tests return value of w', ->
-        console.log("W ###################################")
         [u, v, w] = (xy_to_uvw s, 0, - R + f)
         expect([u, v, w]).toEqual [0, 0, 0]
         [u, v, w] = xy_to_uvw s, s/2, -r
@@ -90,4 +94,15 @@ describe 'Utility code', ->
         expect(w).toEqual 2
         [u, v, w] = xy_to_uvw s, -1.5 * s, h
         expect(w).toEqual -2
+
+        [u, v, w] = xy_to_uvw s, 3 * s, -2 * h
+        expect(w).toEqual 4
+        [u, v, w] = xy_to_uvw s, -3 * s, 2 * h
+        expect(w).toEqual -4
+
+      it 'sample tests of u/v/w', ->
+        [u, v, w] = (xy_to_uvw s, 3 * s, -2 * h)
+        expect([u, v, w]).toEqual [-2, -2, 4]
+        [u, v, w] = (xy_to_uvw s, -s, -4 * h)
+        expect([u, v, w]).toEqual [-4, 3, 1]
 
