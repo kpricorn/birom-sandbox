@@ -1,4 +1,4 @@
-{Util} = require '../lib/util'
+{Util} = require '../../lib/util'
 
 describe 'Utility code', ->
 

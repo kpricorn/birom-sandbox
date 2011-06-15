@@ -26,6 +26,7 @@ end
 
 watch( '^lib/(.*)\.coffee' ) do |md|
   spec = File.join('spec', File.dirname(md[0]), "#{File.basename(md[0], '.coffee')}_spec.coffee")
+  puts spec
   if File.exist?(spec)
     run "Running: #{spec}" do
       `#{RUNNER} #{spec}`
