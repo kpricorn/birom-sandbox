@@ -1,22 +1,59 @@
+#
+#                 F---------E
+#                / \-1/1/1 / \
+#               /   \     /   \
+#              /     \   /     \
+#             /-1/1/0 \ /-1/0/1 \
+#            G---------A---------D
+#           / \ 0/1/0 / \ 0/0/1 / \
+#          /   \     /   \     /   \
+#         /     \   /0/0/0\   /     \
+#        /0/1/-1 \ /   x   \ /0/-1/1 \
+#       o---------B---------C---------o
+#        \1/1/-1 / \ 1/0/0 / \1/-1/1 /
+#         \     /   \     /   \     /
+#          \   /     \   /     \   /
+#           \ /1/0/-1 \ /1/-1/0 \ /
+#            o---------H---------o
+#                  x
+#   v\ /w      +--->
+#     o        |
+#     |u       |
+#              V y
+#
+#
+SR3 = Math.sqrt 3
+PI30 = Math.PI / 6
+PI60 = Math.PI / 3
+SIN30 = Math.sin PI30
+COS30 = Math.cos PI30
+SIN60 = Math.sin PI60
+COS60 = Math.cos PI60
 global.uvw_to_xy = (s, u, v, w) ->
-  r = (Math.sqrt 3) * s / 6
-  R = (Math.sqrt 3) * s / 3
-  h = (Math.sqrt 3) * s / 2
+  r = SR3 * s / 6
+  R = SR3 * s / 3
+  h = SR3 * s / 2
+
   xu = 0
   yu = u * R
-  xv = v * (Math.cos Math.PI / 6) * R
-  yv = -v * (Math.sin Math.PI / 6) * R
-  xw = w * (Math.cos Math.PI / 6) * R
-  yw = w * (Math.sin Math.PI / 6) * R
+
+  xv = -v * COS30 * R
+  yv = -v * SIN30 * R
+
+  xw = w * COS30 * R
+  yw = -w * SIN30 * R
+
   x = xu + xv + xw
   y = yu + yv + yw
-  [x, -y]
+  [x, y]
 
 global.xy_to_uvw = (s, x, y) ->
   return [0, 0, 0] if x is 0 and y is 0
-  r = (Math.sqrt 3) * s / 6
-  R = (Math.sqrt 3) * s / 3
-  h = (Math.sqrt 3) * s / 2
+  r = SR3 * s / 6
+  R = SR3 * s / 3
+  h = SR3 * s / 2
+  console.log "s: #{s} / x: #{x} / y: #{y}"
+  console.log "r: #{r} / R: #{R} / h: #{h}"
 
   u = -(Math.floor (y + R) / h)
   if y > 0
@@ -25,11 +62,7 @@ global.xy_to_uvw = (s, x, y) ->
   else
     factor = -1
     offset = R
-  v = factor * (Math.floor (Math.cos(Math.PI / 3 - 
-    (Math.atan x/y)) * Math.sqrt(Math.pow(x, 2) + 
-    Math.pow(y, 2)) + offset) / h)
-  w = factor * (Math.floor (Math.cos(2 * Math.PI / 3 
-    - (Math.atan x/y)) * Math.sqrt(Math.pow(x, 2) 
-    + Math.pow(y, 2)) + offset) / h)
+  v = factor * (Math.floor (Math.cos(PI60 - (Math.atan x/y)) * Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + offset) / h)
+  w = factor * (Math.floor (Math.cos(2 * PI60 - (Math.atan x/y)) * Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) + offset) / h)
   [u, v, w]
 
