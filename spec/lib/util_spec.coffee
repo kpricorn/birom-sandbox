@@ -10,7 +10,7 @@ describe 'Utility code', ->
   beforeEach ->
     this.addMatchers
       toMatchFuzzily: (expected) ->
-        rlength = 1000
+        rlength = 10
         return false unless expected.length is @actual.length
         for element, i in @actual
           x = parseFloat Math.round(element*Math.pow(rlength,2))/Math.pow(rlength,2)
