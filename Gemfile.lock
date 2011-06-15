@@ -1,0 +1,14 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    growl (1.0.3)
+    ruby-fsevent (0.2.1)
+    watchr (0.7)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  growl
+  ruby-fsevent
+  watchr
