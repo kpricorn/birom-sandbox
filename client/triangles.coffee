@@ -1,11 +1,11 @@
 
 ($ document).ready ->
-  sideLength = 80
+  sideLength = 20
   width = ($ '#paper').width()
   height = ($ '#paper').height()
   xOffset = width / 2
   yOffset = height / 2
-  fieldSize = 4
+  fieldSize = 4 
   uS = []
   vS = []
   wS = []
@@ -36,7 +36,8 @@
   faces = paper.set()
   for v in [-fieldSize..fieldSize]
     for w in [-fieldSize..fieldSize]
-      for u in [w - v, w - v - 1]
+      # condition: u + v + w == 1 || u + v + w == 0
+      for u in [ 1 - v - w, -v - w ]
         totalCoordinates++
         # check sectors, not all combos are valid
         console.log "✓: #{u}/#{v}/#{w}"
