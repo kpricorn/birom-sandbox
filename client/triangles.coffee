@@ -1,6 +1,6 @@
 
 ($ document).ready ->
-  sideLength = 20
+  sideLength = 80
   width = ($ '#paper').width()
   height = ($ '#paper').height()
   xOffset = width / 2
